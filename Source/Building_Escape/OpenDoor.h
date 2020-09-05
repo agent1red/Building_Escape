@@ -25,7 +25,10 @@ public:
 	UOpenDoor();
 private:
 // private declarations 
-float TargetYaw;
 float InitialYaw;
-float CurrentYaw;		
+float CurrentYaw;	
+
+UPROPERTY(EditAnywhere)// expose this property in the editor 
+float TargetYaw = 90.F;
+	
 };
