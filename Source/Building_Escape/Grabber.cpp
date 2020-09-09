@@ -1,5 +1,4 @@
 // Copyright Kevin Hudson 2020.
-
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
@@ -23,8 +22,35 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
+
+	//Checking for Physics Handle Component
+	PhysicsHandle = GetOwner() ->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle)
+	{
+		//Physics not found
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No physics handle component found on %s!"), *GetOwner() -> GetName());
+	}
 	
+	InputComponent = GetOwner() ->FindComponentByClass<UInputComponent>();
+
+	if (InputComponent)
+	{
+		InputComponent ->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent ->BindAction("Release",IE_Released, this, &UGrabber::Release);
+	}	
+}
+
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grabber pressed"));
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grabber released"));
 }
 
 
@@ -43,7 +69,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT PlayerViewPointRotation
 	);
 
-		//logging out to test
 
 	// UE_LOG(LogTemp, Warning, TEXT("Location:%s  Rotation: %s"), 
 	// 	*PlayerViewPointLocation.ToString(), 
@@ -65,8 +90,28 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		5.f
 	);
 
-
+	FHitResult Hit; 
 	// Ray-cast out to a certain distance (reach) private member variable 
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+
+
+	GetWorld() ->LineTraceSingleByObjectType(
+		OUT Hit,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
+
+	//logging out to test
+	AActor* ActorHit = Hit.GetActor();
+
+	if (ActorHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Actor hits: %s"), *(ActorHit ->GetName()));
+	}
+	
+	
 
 	// See what it hits (is that something we can pick up?) 
 }
