@@ -29,6 +29,7 @@ public:
 	void FindAudioComponent();
 	void FindPressurePlate();
 
+	//Tracks sound being played
 	bool OpenDoorSound = false;
 	bool CloseDoorSound = true;
 

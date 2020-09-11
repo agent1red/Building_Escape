@@ -51,6 +51,7 @@ void UGrabber::Grab()
 	FHitResult HitResult = GetFirstPhysicsBodyInReach();
 	UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
 	AActor* ActorHit = HitResult.GetActor();
+
 	//If we hit something then attach the phisics handle.
 	if (ActorHit)
 	{ if(!PhysicsHandle) {return;}
@@ -105,7 +106,7 @@ FHitResult UGrabber::GetFirstPhysicsBodyInReach() const
 FVector UGrabber::GetPlayersReach() const
 {
 	FVector PlayerViewPointLocation;
-		FRotator PlayerViewPointRotation;
+	FRotator PlayerViewPointRotation;
 
 	GetWorld() ->GetFirstPlayerController() ->GetPlayerViewPoint(
 		OUT PlayerViewPointLocation, 

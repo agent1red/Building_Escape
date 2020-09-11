@@ -25,14 +25,8 @@ void UWorldPosition::BeginPlay()
 	// UE_LOG(LogTemp, Display, TEXT("Just a log"));
 
 	FString ObjectName = GetOwner() -> GetName();
-
-	UE_LOG(LogTemp, Warning, TEXT("Objec name is: %s"), *GetOwner() -> GetName());
-
 	FString ObjectPosition = GetOwner() ->GetActorLocation().ToString();
 	FString ObjectRotation = GetOwner() ->GetActorTransform().GetRotation().ToString();
-	UE_LOG(LogTemp, Warning, TEXT("Object name is: %s. The object locations are: %s"), *ObjectName, *ObjectPosition);
-	UE_LOG(LogTemp, Warning, TEXT("Object's Rotation are: %s" ), *ObjectRotation);
-
 }
 
 
