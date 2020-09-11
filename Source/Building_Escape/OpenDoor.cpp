@@ -29,7 +29,6 @@ void UOpenDoor::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has the door component on i, but no pressureplate set!"), *GetOwner() ->GetName());
 	}
-	ActorThatOpens = GetWorld() ->GetFirstPlayerController() ->GetPawn();
 }
 
 
@@ -44,7 +43,6 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (TotalMassOfActors() > MassToOpenDoors)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%f"), TotalMassOfActors());
 		OpenDoor(DeltaTime);
 		DoorLastOpened = GetWorld() ->GetTimeSeconds();
 	}
@@ -83,13 +81,13 @@ float UOpenDoor::TotalMassOfActors() const
 
 	// Find all Overlapping actors 
 	TArray<AActor*> OverlappingActors;
+	if(!PressurePlate) {return TotalMass;}
 	PressurePlate -> GetOverlappingActors(OUT OverlappingActors);
 
 	// Add up their masses. 
 	for (AActor* Actor : OverlappingActors)
 	{
 		TotalMass += Actor ->FindComponentByClass<UPrimitiveComponent>() -> GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Actor -> GetName())
 	}
 	
 	return TotalMass;

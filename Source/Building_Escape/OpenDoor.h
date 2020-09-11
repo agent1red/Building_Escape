@@ -39,10 +39,7 @@ UPROPERTY(EditAnywhere)// expose this property in the editor
 float OpenAngle = 90.F;
 
 UPROPERTY(EditAnywhere)
-ATriggerVolume* PressurePlate;
-
-UPROPERTY(EditAnywhere)
-AActor* ActorThatOpens;
+ATriggerVolume* PressurePlate = nullptr;
 
 float DoorLastOpened = 0.f;
 
