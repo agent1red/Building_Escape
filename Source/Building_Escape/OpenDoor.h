@@ -25,6 +25,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void OpenDoor(float DeltaTime);
 	void CloseDoor(float DeltaTime);
+	float TotalMassOfActors() const;
 
 public:	
 	// Sets default values for this component's properties
@@ -50,6 +51,9 @@ float DoorCloseDelay = 2.f;
 
 UPROPERTY(EditAnywhere)
 float DoorOpenSpeed = 2.f;
+
+UPROPERTY(EditAnywhere)
+float MassToOpenDoors = 50.f;
 
 UPROPERTY(EditAnywhere)
 float DoorClosedSpeed = 2.f;

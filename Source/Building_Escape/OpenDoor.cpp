@@ -1,10 +1,12 @@
 // Copyright Kevin Hudson 2020.
 
 #include "OpenDoor.h"
+#include "Components/PrimitiveComponent.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
 
+#define OUT
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
@@ -35,20 +37,24 @@ void UOpenDoor::BeginPlay()
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 	
+
 	CurrentTime = GetWorld() ->GetTimeSeconds();
-	if (PressurePlate && PressurePlate -> IsOverlappingActor(ActorThatOpens))
+
+	if (TotalMassOfActors() > MassToOpenDoors)
 	{
+		UE_LOG(LogTemp, Error, TEXT("%f"), TotalMassOfActors());
 		OpenDoor(DeltaTime);
 		DoorLastOpened = GetWorld() ->GetTimeSeconds();
-		return;
 	}
-	
 	// if the door has been opened longer than DoorCloseDelay
-	if (!PressurePlate -> IsOverlappingActor(ActorThatOpens) && CurrentTime - DoorLastOpened > DoorCloseDelay)
+	else 
 	{
-		CloseDoor(DeltaTime);
-		return;
+		if (CurrentTime - DoorLastOpened > DoorCloseDelay)
+		{
+			CloseDoor(DeltaTime);
+		}
 	}
 }
 
@@ -70,3 +76,21 @@ void UOpenDoor::CloseDoor(float DeltaTime)
 	GetOwner() -> SetActorRotation(DoorRotation);
 }
 
+float UOpenDoor::TotalMassOfActors() const
+{
+	float TotalMass = 0.f;
+
+
+	// Find all Overlapping actors 
+	TArray<AActor*> OverlappingActors;
+	PressurePlate -> GetOverlappingActors(OUT OverlappingActors);
+
+	// Add up their masses. 
+	for (AActor* Actor : OverlappingActors)
+	{
+		TotalMass += Actor ->FindComponentByClass<UPrimitiveComponent>() -> GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Actor -> GetName())
+	}
+	
+	return TotalMass;
+}
