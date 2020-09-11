@@ -26,6 +26,11 @@ public:
 	void OpenDoor(float DeltaTime);
 	void CloseDoor(float DeltaTime);
 	float TotalMassOfActors() const;
+	void FindAudioComponent();
+	void FindPressurePlate();
+
+	bool OpenDoorSound = false;
+	bool CloseDoorSound = true;
 
 public:	
 	// Sets default values for this component's properties
@@ -54,6 +59,9 @@ float MassToOpenDoors = 50.f;
 
 UPROPERTY(EditAnywhere)
 float DoorClosedSpeed = 2.f;
+
+UPROPERTY()
+UAudioComponent* AudioComponent = nullptr;
 
 float CurrentTime = 0.f;
 	
